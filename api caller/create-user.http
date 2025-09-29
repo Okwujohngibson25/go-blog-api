@@ -1,0 +1,10 @@
+POST http://localhost:8080/create
+Content-Type: application/json
+
+
+{
+    "fullname": "okwu john gibson",
+    "username": "gibwrld auth",
+    "email": "test2@gmail.com",
+    "password": "12345#"
+}
