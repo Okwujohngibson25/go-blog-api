@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"example.com/net-http-class/models"
-	"example.com/net-http-class/utils"
+	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
 
@@ -16,13 +16,8 @@ func NewBlogservice(db *gorm.DB) *Blogservice {
 	return &Blogservice{DB: db}
 }
 
-func (t *Blogservice) CreateBlogPost(token string, post *models.Blogrequest) error {
-	claims, err := utils.VerifyToken(token)
-	if err != nil {
-		return fmt.Errorf("invalid jwt token: %w", err)
-	}
-
-	User_id := claims.User_ID
+func (t *Blogservice) CreateBlogPost(userid uuid.UUID, post *models.Blogrequest) error {
+	User_id := userid
 
 	blog := models.Blog{
 		Title:  post.Title,
@@ -37,24 +32,19 @@ func (t *Blogservice) CreateBlogPost(token string, post *models.Blogrequest) err
 	return nil
 }
 
-func (t *Blogservice) FetchBlogPost(token string) ([]models.Blog, error) {
-	claims, err := utils.VerifyToken(token)
-	if err != nil {
-		return nil, fmt.Errorf("invalid jwt token: %w", err)
-	}
-
+func (t *Blogservice) FetchBlogPost(userid uuid.UUID) ([]models.Blog, error) {
 	var Post []models.Blog
 
-	user_id := claims.User_ID
+	User_id := userid
 
-	result := t.DB.Where("user_id = ?", user_id).Find(&Post)
+	result := t.DB.Where("user_id = ?", User_id).Find(&Post)
 	if result.Error != nil {
 		return nil, fmt.Errorf("couldn't find user: %w", result.Error)
 	}
 
 	if result.RowsAffected == 0 {
 		// No posts found
-		return nil, fmt.Errorf("no posts found for user %s", user_id)
+		return nil, fmt.Errorf("no posts found for user %s", User_id)
 	}
 
 	return Post, nil

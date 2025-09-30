@@ -6,14 +6,11 @@ import (
 	"example.com/net-http-class/models"
 	"example.com/net-http-class/services"
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 )
 
 func CreateBlogpost(ctx *gin.Context, Blogservice *services.Blogservice) {
-	authHeader := ctx.GetHeader("Authorization")
-	if authHeader == "" {
-		ctx.JSON(401, gin.H{"error": "missing token"})
-		return
-	}
+	userID := ctx.MustGet("userid").(uuid.UUID) // getting Userid passed inside gin.context header from middleware
 
 	var input models.Blogrequest
 
@@ -23,7 +20,7 @@ func CreateBlogpost(ctx *gin.Context, Blogservice *services.Blogservice) {
 		return
 	}
 
-	err = Blogservice.CreateBlogPost(authHeader, &input)
+	err = Blogservice.CreateBlogPost(userID, &input)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"message": "could not create blog post", "error": err.Error()})
 		return
@@ -33,13 +30,9 @@ func CreateBlogpost(ctx *gin.Context, Blogservice *services.Blogservice) {
 }
 
 func FetchBlogPost(ctx *gin.Context, Blogservice *services.Blogservice) {
-	token := ctx.GetHeader("Authorization")
-	if token == "" {
-		ctx.JSON(401, gin.H{"error": "missing token"})
-		return
-	}
+	userID := ctx.MustGet("userid").(uuid.UUID) // getting Userid passed inside gin.context header from middleware
 
-	post, err := Blogservice.FetchBlogPost(token)
+	post, err := Blogservice.FetchBlogPost(userID)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"message": "could not Fetch blog post for user", "error": err.Error()})
 	}
