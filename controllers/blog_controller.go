@@ -39,3 +39,19 @@ func FetchBlogPost(ctx *gin.Context, Blogservice *services.Blogservice) {
 
 	ctx.JSON(http.StatusOK, gin.H{"message": "post found", "post": post})
 }
+
+func FetchPostById(ctx *gin.Context, Blogservice *services.Blogservice) {
+	id_string := ctx.Param("id")
+	id, err := uuid.Parse(id_string)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"message": "could not convert string ID to type uuid", "error": err.Error()})
+	}
+	userID := ctx.MustGet("userid").(uuid.UUID)
+
+	blogpost, err := Blogservice.FetchBlogPostById(id, userID)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{"message": "blog post fetched by. Id", "post": blogpost})
+}

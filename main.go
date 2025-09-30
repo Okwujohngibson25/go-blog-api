@@ -37,6 +37,9 @@ func main() {
 	auth.GET("/fetchpost", func(ctx *gin.Context) {
 		controllers.FetchBlogPost(ctx, Blogservice)
 	})
+	auth.GET("/fetchpost/:id", func(ctx *gin.Context) {
+		controllers.FetchPostById(ctx, Blogservice)
+	})
 
 	server.Run(":8080") // Runing on localhost:8080
 }

@@ -1,6 +1,7 @@
 package services
 
 import (
+	"errors"
 	"fmt"
 
 	"example.com/net-http-class/models"
@@ -48,4 +49,18 @@ func (t *Blogservice) FetchBlogPost(userid uuid.UUID) ([]models.Blog, error) {
 	}
 
 	return Post, nil
+}
+
+func (t *Blogservice) FetchBlogPostById(ID, userID uuid.UUID) (*models.Blog, error) {
+	var blog models.Blog
+
+	err := t.DB.Where("user_id = ? AND id = ?", userID, ID).First(&blog).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, fmt.Errorf("no Blogpost found")
+		}
+		return nil, fmt.Errorf("error fetching blogpost: %w", err)
+	}
+
+	return &blog, nil
 }

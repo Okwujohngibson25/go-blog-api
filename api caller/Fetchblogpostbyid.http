@@ -1,2 +1,2 @@
-GET http://localhost:8080/fetchpost
+GET http://localhost:8080/fetchpost/4fabc154-1d65-44e4-9e87-f872589167d0
 Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RAZ21haWwuY29tIiwidXNlcmlkIjoiNjJkNmQzMTYtNjJiMC00YWVkLWFlYTEtNjU0MTI5Y2VkY2ZkIiwiZXhwIjoxNzU5MjMyMjQ4LCJpYXQiOjE3NTkyMjUwNDh9.wlCCAvsfIpC74kP8yjQlcgeROfxiMXSOb3G43UPwq-0
