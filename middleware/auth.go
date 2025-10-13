@@ -1,7 +1,6 @@
 package middleware
 
 import (
-	"fmt"
 	"net/http"
 
 	"example.com/net-http-class/utils"
@@ -22,6 +21,5 @@ func Authenticate(c *gin.Context) {
 		return
 	}
 	c.Set("userid", claims.User_ID)
-	fmt.Println(claims.User_ID)
 	c.Next()
 }

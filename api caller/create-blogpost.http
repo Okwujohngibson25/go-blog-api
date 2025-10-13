@@ -1,10 +1,11 @@
 POST http://localhost:8080/createpost
 Content-Type: application/json
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RAZ21haWwuY29tIiwidXNlcmlkIjoiNjJkNmQzMTYtNjJiMC00YWVkLWFlYTEtNjU0MTI5Y2VkY2ZkIiwiZXhwIjoxNzU5MTUzMTA5LCJpYXQiOjE3NTkxNDU5MDl9.Na3W1JDdBVYQvvpGL-KWv_5VP_y-WEv2pvJXvtm-wLc
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RAc2l0ZS5jb20iLCJ1c2VyaWQiOiIwOGM3ZDg3Ni0yODA1LTQ3MTAtOGNiMC0yZGVjNTFjZDljMzUiLCJleHAiOjE3NjAzNjQyNTYsImlhdCI6MTc2MDM1NzA1Nn0.--dOVlMzlwcxl0fFkBcr6P4LiqHGcWOa22MYtx7ju4g
+
 
 
 {
-    "title": "my very first blog post from gibson4",
+    "title": "my very first blog post from test user",
     "post": "Learning something new every day transforms your mind and your life."
 
 }

@@ -3,8 +3,8 @@ Content-Type: application/json
 
 
 {
-    "fullname": "okwu john gibson",
-    "username": "gibwrld auth",
-    "email": "test2@gmail.com",
+    "fullname": "test author",
+    "username": "test author",
+    "email": "test@site.com",
     "password": "12345#"
 }

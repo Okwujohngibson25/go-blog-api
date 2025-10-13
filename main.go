@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"os"
 
 	"example.com/net-http-class/config"
 	"example.com/net-http-class/controllers"
@@ -15,7 +16,13 @@ import (
 func main() {
 	server := gin.Default() // gin initialization
 
-	db := config.DBconnect()                               // db *gorm.db stored in db
+	db := config.DBconnect() // db *gorm.db stored in db
+
+	if os.Getenv("RESET_DB") == "true" {
+		db.Migrator().DropTable(&models.Users{}, &models.Blog{})
+		db.AutoMigrate(&models.Users{}, &models.Blog{})
+	}
+
 	err := db.AutoMigrate(&models.Users{}, &models.Blog{}) // Automigration of tables
 	if err != nil {
 		log.Fatal("could not create migration", err)

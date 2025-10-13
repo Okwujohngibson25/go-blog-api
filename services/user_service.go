@@ -61,8 +61,8 @@ func (s *UserService) Loginuser(user *models.Users) (string, error) {
 	secretKey := os.Getenv("JWT_SECRET")
 
 	claims := CustomClaims{
-		Email:   user.Email,
-		User_ID: user.ID,
+		Email:   dbUser.Email,
+		User_ID: dbUser.ID,
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(2 * time.Hour)),
 			IssuedAt:  jwt.NewNumericDate(time.Now()),

@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"net/http"
 
 	"example.com/net-http-class/models"
@@ -31,6 +32,7 @@ func CreateBlogpost(ctx *gin.Context, Blogservice *services.BlogService) {
 
 func FetchBlogPost(ctx *gin.Context, Blogservice *services.BlogService) {
 	userID := ctx.MustGet("userid").(uuid.UUID) // getting Userid passed inside gin.context header from middleware
+	fmt.Printf("this is the user id from handler: %v\n", userID)
 
 	post, err := Blogservice.FetchBlogPost(userID)
 	if err != nil {
