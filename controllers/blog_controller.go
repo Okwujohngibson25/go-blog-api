@@ -9,7 +9,7 @@ import (
 	"github.com/google/uuid"
 )
 
-func CreateBlogpost(ctx *gin.Context, Blogservice *services.Blogservice) {
+func CreateBlogpost(ctx *gin.Context, Blogservice *services.BlogService) {
 	userID := ctx.MustGet("userid").(uuid.UUID) // getting Userid passed inside gin.context header from middleware
 
 	var input models.Blogrequest
@@ -29,7 +29,7 @@ func CreateBlogpost(ctx *gin.Context, Blogservice *services.Blogservice) {
 	ctx.JSON(http.StatusOK, gin.H{"message": "blog post created"})
 }
 
-func FetchBlogPost(ctx *gin.Context, Blogservice *services.Blogservice) {
+func FetchBlogPost(ctx *gin.Context, Blogservice *services.BlogService) {
 	userID := ctx.MustGet("userid").(uuid.UUID) // getting Userid passed inside gin.context header from middleware
 
 	post, err := Blogservice.FetchBlogPost(userID)
@@ -40,7 +40,7 @@ func FetchBlogPost(ctx *gin.Context, Blogservice *services.Blogservice) {
 	ctx.JSON(http.StatusOK, gin.H{"message": "post found", "post": post})
 }
 
-func FetchPostById(ctx *gin.Context, Blogservice *services.Blogservice) {
+func FetchPostById(ctx *gin.Context, Blogservice *services.BlogService) {
 	id_string := ctx.Param("id")
 	id, err := uuid.Parse(id_string)
 	if err != nil {

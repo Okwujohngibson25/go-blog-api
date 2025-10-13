@@ -8,7 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func Createnewuser(ctx *gin.Context, service *services.Userservicedependencies) {
+func Createnewuser(ctx *gin.Context, service *services.UserService) {
 	var user models.Users
 	err := ctx.ShouldBindJSON(&user)
 	if err != nil {
@@ -24,7 +24,7 @@ func Createnewuser(ctx *gin.Context, service *services.Userservicedependencies) 
 	ctx.JSON(http.StatusOK, gin.H{"message": "Account created"})
 }
 
-func Loginuser(ctx *gin.Context, service *services.Userservicedependencies) {
+func Loginuser(ctx *gin.Context, service *services.UserService) {
 	var user models.Users
 	err := ctx.ShouldBindJSON(&user)
 	if err != nil {

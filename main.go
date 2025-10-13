@@ -7,6 +7,7 @@ import (
 	"example.com/net-http-class/controllers"
 	"example.com/net-http-class/middleware"
 	"example.com/net-http-class/models"
+	"example.com/net-http-class/repository"
 	"example.com/net-http-class/services"
 	"github.com/gin-gonic/gin"
 )
@@ -19,9 +20,12 @@ func main() {
 	if err != nil {
 		log.Fatal("could not create migration", err)
 	}
+
+	UserRepository := repository.NewUserRepository(db)
+	BlogRepository := repository.NewBlogRepository(db)
 	// Services
-	Userservice := services.NewUserservicedependencies(db)
-	Blogservice := services.NewBlogservice(db)
+	Userservice := services.NewUserService(UserRepository)
+	Blogservice := services.NewBlogService(BlogRepository)
 
 	server.POST("/create", func(ctx *gin.Context) {
 		controllers.Createnewuser(ctx, Userservice)
