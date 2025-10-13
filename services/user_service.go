@@ -7,11 +7,19 @@ import (
 	"time"
 
 	"example.com/net-http-class/models"
+	"example.com/net-http-class/repository"
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
-	"gorm.io/gorm"
 )
+
+type UserService struct {
+	userRepo repository.UserRepository
+}
+
+func NewUserService(userRepo repository.UserRepository) *UserService {
+	return &UserService{userRepo: userRepo}
+}
 
 // custom struct for JWT
 type CustomClaims struct {
@@ -20,41 +28,33 @@ type CustomClaims struct {
 	jwt.RegisteredClaims
 }
 
-type Userservicedependencies struct {
-	db *gorm.DB
-}
-
-func NewUserservicedependencies(DB *gorm.DB) *Userservicedependencies {
-	return &Userservicedependencies{db: DB}
-}
-
-func (s *Userservicedependencies) Createuser(user *models.Users) error {
+func (s *UserService) Createuser(user *models.Users) error {
 	// Hashpassword using Bcrypt
 	hashedpass, err := bcrypt.GenerateFromPassword([]byte(user.Password), 10)
 	if err != nil {
 		return fmt.Errorf("hashing Password failed: %w", err)
 	}
 
-	user.Password = string([]byte(hashedpass)) // setting incoming datapassword to the hashed password
+	user.Password = string(hashedpass) // setting incoming datapassword to the hashed password
 
-	result := s.db.Create(&user)
-	if result.Error != nil {
-		return fmt.Errorf("user creation failed: %w", result.Error)
+	err = s.userRepo.Create(user)
+	if err != nil {
+		return fmt.Errorf("user creation failed: %w", err)
 	}
 	return nil
 }
 
-func (s *Userservicedependencies) Loginuser(user *models.Users) (string, error) {
+func (s *UserService) Loginuser(user *models.Users) (string, error) {
 	Plainpassword := user.Password
-	result := s.db.Where("email = ?", user.Email).First(user)
-	if result.Error != nil {
-		return "", fmt.Errorf("couldn't find user: %w", result.Error)
+	dbUser, err := s.userRepo.FindUserByEmail(user.Email)
+	if err != nil {
+		return "", fmt.Errorf("couldn't find user: %w", err)
 	}
 
 	// compare plain password to hashedpassword
-	err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(Plainpassword))
+	err = bcrypt.CompareHashAndPassword([]byte(dbUser.Password), []byte(Plainpassword))
 	if err != nil {
-		return "", fmt.Errorf("password do not match: %w", result.Error)
+		return "", fmt.Errorf("password do not match: %w", err)
 	}
 
 	// secretKey for signing JWT token
